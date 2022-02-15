@@ -37,7 +37,7 @@ if __name__ == "__main__":
         testset = pd.read_csv(test_path)        
         dataset = pd.concat((trainset, testset))
         dataset = dataset.drop(labels=["contain_gender_bias", "bias"], axis=1)
-        dataset = dataset.rename(columns={"hate":"labels"})
+        dataset = dataset.rename(columns={"hate":"label"})
         dataset.to_csv(origin_path, index=False)
     
     if osp.exists(train_path):
