@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torchmetrics.functional import accuracy, f1_score, precision, recall
+from torchmetrics.functional import accuracy
 from wandb.plot import confusion_matrix
 from torch.utils.data import Dataset, DataLoader
 from transformers import AutoTokenizer, BertForSequenceClassification, ElectraForSequenceClassification, AlbertForSequenceClassification
@@ -48,8 +48,8 @@ class Model(pl.LightningModule):
         logits = outputs.logits
         preds = torch.argmax(logits, dim=-1)
         acc = accuracy(preds, batch["labels"])
-        self.log("train/loss", loss)
-        self.log("train/acc", acc)
+        self.log("train_loss", loss)
+        self.log("train_acc", acc)
         return loss
     
     def evaluate(self, batch, stage=None):
@@ -57,34 +57,22 @@ class Model(pl.LightningModule):
         logits = outputs.logits
         loss = outputs.loss
         preds = torch.argmax(logits, dim=-1)
-
         acc = accuracy(preds, batch["labels"])
-        precision_macro = precision(preds, batch["labels"], average="macro", num_classes=self.hparams.num_labels)
-        recall_macro = recall(preds, batch["labels"], average="macro", num_classes=self.hparams.num_labels)
-        precision_micro = precision(preds, batch["labels"], average="micro")
-        recall_micro = recall(preds, batch["labels"], average="micro")
-        f1 = f1_score(preds, batch["labels"])
 
         if stage:
-            self.log(f"{stage}/loss", loss, prog_bar=True)
-            self.log(f"{stage}/acc", acc, prog_bar=True)
-            self.log(f"{stage}/precision_macro", precision_macro, prog_bar=True)
-            self.log(f"{stage}/recall_macro", recall_macro, prog_bar=True)
-            self.log(f"{stage}/precision_micro", precision_micro, prog_bar=True)
-            self.log(f"{stage}/recall_micro", recall_micro, prog_bar=True)
-            self.log(f"{stage}/f1", f1, prog_bar=True)
-
-        return {"labels": batch["labels"].detach().cpu(), "preds": preds.detach().cpu()}
+            self.log(f"{stage}_loss", loss, prog_bar=True)
+            self.log(f"{stage}_acc", acc, prog_bar=True)
+        return {"targets": batch["labels"].detach().cpu(), "preds": preds.detach().cpu()}
 
     def validation_step(self, batch, batch_idx):
         return self.evaluate(batch, "val")
     
     def validation_epoch_end(self, outputs):
-        labels = torch.cat([tmp["labels"] for tmp in outputs])
+        targets = torch.cat([tmp["targets"] for tmp in outputs])
         preds = torch.cat([tmp["preds"] for tmp in outputs])
 
         self.logger.experiment.log({"conf_mat": confusion_matrix(
-                            probs=None, y_true=labels.numpy(), preds=preds.numpy(),
+                            probs=None, y_true=targets.numpy(), preds=preds.numpy(),
                             class_names=self.hparams.class_names)}
         )
 
