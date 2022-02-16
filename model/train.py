@@ -18,10 +18,10 @@ def train(args):
     pl.seed_everything(args["seed"])
 
     checkpoint_callback = ModelCheckpoint(
-        filename='epoch{epoch}-val_acc{val_acc:.4f}',
-        monitor='val_acc',
+        filename='epoch{epoch}-val_acc{val/acc:.4f}-val_loss{val/loss:.4f}',
+        monitor='val/loss',
         save_top_k=1,
-        mode='max',
+        mode='min',
         auto_insert_metric_name=False,
     )
     model = Model(**args)
@@ -46,7 +46,7 @@ args = {
     "project": "toxic-comment-classification",
     "seed": 42,
     "batch_size": 16,
-    "epochs": 1,
+    "epochs": 10,
     "lr": 6e-6,
     "num_labels": 3,
     "optimizer": "AdamW",
