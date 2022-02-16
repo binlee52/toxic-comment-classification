@@ -131,4 +131,9 @@ dmypy.json
 
 # data
 data/
+wandb/
+lightning_logs/
+
+*.ckpt
 *.csv
+*.wandb
