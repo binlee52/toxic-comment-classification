@@ -9,7 +9,7 @@ from wandb.plot import confusion_matrix
 from torch.utils.data import Dataset, DataLoader
 from transformers import AutoTokenizer, BertForSequenceClassification, ElectraForSequenceClassification, AlbertForSequenceClassification
 from transformers import AlbertForSequenceClassification, RobertaForSequenceClassification
-from dataset import KorHateDataset
+from .dataset import KorHateDataset
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt

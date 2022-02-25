@@ -1,0 +1,14 @@
+_target_: src.datamodules.korhate_datamodule.KorHateDataModule
+
+data_train: ${data_dir}/kor_hate_train.csv
+data_val: ${data_dir}/kor_hate_val.csv
+data_test: ${data_dir}/kor_hate_origin.csv
+num_classes: 3
+batch_size: 16
+pin_memory: False
+pretrained_model: ${model.pretrained_model}
+max_length: 256
+class_names:
+  - hate
+  - offensive
+  - none
