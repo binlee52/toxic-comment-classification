@@ -1,6 +1,0 @@
-wdir: ..
-outs:
-- md5: 00c6c23314a9cb25a4035248f4df6aa3.dir
-  size: 2655521962
-  nfiles: 21
-  path: logs
