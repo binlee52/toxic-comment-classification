@@ -1,5 +1,8 @@
 #!/bin/sh
-
+dir="dvcfiles"
+if [ ! -d $dir ]; then
+    mkdir $dir
+fi
 # experiments name
 name="default"
 while getopts "n:" opt; do
@@ -15,5 +18,5 @@ while getopts "n:" opt; do
 done
 ckpt="$(python dvc-script.py $name)"
 #echo $ckpt
-dvc add $ckpt --file dvcfiles/trained_models.dvc
+dvc add $ckpt --file "$dir/trained_models.dvc"
 dvc push dvcfiles/trained_models.dvc
