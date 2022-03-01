@@ -1,5 +1,5 @@
-wdir: ../logs/experiments/runs/default/2022-03-01_05-16-10/checkpoints
+wdir: ../logs/experiments/runs/default/2022-03-02_01-17-03/checkpoints
 outs:
-- md5: 2e83b2a55866cc2e2ea54d3690a4f922
-  size: 1327655045
-  path: epoch_000.ckpt
+- md5: a63a9fd404b6b825b3705bf75cfd3f07
+  size: 1327655493
+  path: epoch_009.ckpt
